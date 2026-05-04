@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>Kinsman Realty | Find Your Dream Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fb;
+      min-height: 100vh;
+    }
+    /* Header */
+    .site-header {
+      background: #0a2a3f;
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-container {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 1.4rem; font-weight: 700; color: white; }
+    .logo span { color: #c9a03d; }
+    .badge {
+      background: rgba(201,160,61,0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: #c9a03d;
+    }
+    /* Main Container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    /* Search Card */
+    .search-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
+    }
+    .search-card h2 { color: #0a2a3f; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .search-card p { color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .zip-input-group {
+      display: flex;
+      gap: 0.8rem;
+    }
+    .zip-input-group input {
+      flex: 1;
+      padding: 0.9rem;
+      font-size: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 60px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .zip-input-group input:focus {
+      outline: none;
+      border-color: #c9a03d;
+    }
+    .zip-input-group button {
+      background: #c9a03d;
+      color: #0a2a3f;
+      padding: 0.9rem 1.5rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+    }
+    
+    /* Results Section */
+    .results-section {
+      display: none;
+      margin-top: 1rem;
+    }
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0 0.5rem;
+    }
+    .results-header h3 { color: #0a2a3f; font-size: 1.1rem; }
+    .back-btn {
+      background: none;
+      border: none;
+      color: #0a2a3f;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    
+    /* Property List */
+    .properties-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .property-item {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #eef2f6;
+    }
+    .property-item:active { background: #f8fafc; }
+    .property-content {
+      display: flex;
+      padding: 1rem;
+      gap: 1rem;
+    }
+    .property-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .property-info { flex: 1; }
+    .property-price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #c9a03d;
+    }
+    .property-address {
+      font-size: 0.75rem;
+      color: #4a5568;
+      margin: 0.25rem 0;
+    }
+    .property-features {
+      display: flex;
+      gap: 0.8rem;
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 0.5rem;
+    }
+    .owner-preview {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #eef2f6;
+    }
+    .owner-preview img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .owner-preview span { font-size: 0.7rem; color: #64748b; }
+    
+    /* Modal - FULL SCROLLABLE CONTENT */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal-content {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      min-height: 100vh;
+      position: relative;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: sticky;
+      top: 0.8rem;
+      right: 1rem;
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      margin: 0.8rem 0.8rem 0 0;
+    }
+    .modal-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    .modal-info {
+      padding: 1.2rem;
+      padding-bottom: 2rem;
+    }
+    .modal-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #c9a03d;
+      margin-bottom: 0.3rem;
+    }
+    .modal-address {
+      font-size: 0.85rem;
+      color: #4a5568;
+      margin: 0.5rem 0;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .modal-features {
+      display: flex;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-top: 1px solid #eef2f6;
+      border-bottom: 1px solid #eef2f6;
+      margin: 0.5rem 0;
+      flex-wrap: wrap;
+    }
+    .modal-features span {
+      font-size: 0.9rem;
+    }
+    .thumb-gallery {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.5rem 0;
+      margin: 0.5rem 0;
+    }
+    .thumb-gallery img {
+      width: 70px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      flex-shrink: 0;
+    }
+    .thumb-gallery img:hover { border-color: #c9a03d; }
+    .owner-section {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+    }
+    .owner-section img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #c9a03d;
+    }
+    .owner-section div { flex: 1; }
+    .owner-section strong { font-size: 1rem; }
+    .remark {
+      background: #fef9e6;
+      padding: 1rem;
+      border-radius: 1rem;
+      border-left: 4px solid #c9a03d;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .contact-btn, .apply-btn {
+      flex: 1;
+      padding: 0.9rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+      font-size: 0.9rem;
+    }
+    .contact-btn { background: #0a2a3f; color: white; }
+    .apply-btn { background: #c9a03d; color: #0a2a3f; }
+    
+    /* Contact Popup */
+    .contact-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1100;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact-popup-content {
+      background: white;
+      max-width: 320px;
+      width: 90%;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+    .contact-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .contact-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+    .contact-option {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 10px;
+      background: #f1f5f9;
+      border-radius: 50px;
+      text-decoration: none;
+      color: #0a2a3f;
+    }
+    .contact-option i { width: 25px; color: #c9a03d; }
+    
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 1rem;
+      border-radius: 1rem;
+      text-align: center;
+      display: none;
+      margin-top: 1rem;
+    }
+    footer {
+      background: #0a2a3f;
+      padding: 1rem;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.7rem;
+      margin-top: 1rem;
+    }
+    /* Clearfix */
+    .clearfix::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-container">
+    <div class="logo">Kinsman <span>Realty</span> Group</div>
+    <div class="badge"><i class="fas fa-home"></i> Rentals</div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Search Card -->
+  <div class="search-card" id="searchCard">
+    <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: #c9a03d;"></i>
+    <h2>Find Your Perfect Home</h2>
+    <p>Enter a zip code to see available rentals</p>
+    <div class="zip-input-group">
+      <input type="text" id="zipInput" placeholder="Enter Zip Code" maxlength="5" pattern="[0-9]{5}">
+      <button id="searchBtn">Search</button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div id="resultsSection" class="results-section">
+    <div class="results-header">
+      <h3><i class="fas fa-home"></i> Properties in <span id="zipDisplay"></span></h3>
+      <button id="backToSearchBtn" class="back-btn"><i class="fas fa-arrow-left"></i> New Search</button>
+    </div>
+    <div id="propertiesList" class="properties-list"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div id="errorMessage" class="error-message">
+    <i class="fas fa-exclamation-triangle"></i> No properties found for this zip code.
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Kinsman Realty Group — Find Your Dream Home</p>
+</footer>
+
+<!-- Property Modal -->
+<div id="propertyModal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close" id="modalClose">&times;</span>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Contact Popup -->
+<div id="contactPopup" class="contact-popup">
+  <div class="contact-popup-content">
+    <span class="contact-close" id="closeContactPopup">&times;</span>
+    <i class="fas fa-user-tie" style="font-size: 1.8rem; color: #c9a03d;"></i>
+    <h3 style="margin: 0.5rem 0;">Contact Landlord</h3>
+    <div class="contact-options">
+      <a href="#" id="popupEmail" class="contact-option"><i class="fas fa-envelope"></i> Send Email</a>
+      <a href="#" id="popupFacebook" class="contact-option" target="_blank"><i class="fab fa-facebook-messenger"></i> Facebook Message</a>
+      <a href="#" id="popupPhone" class="contact-option"><i class="fas fa-phone-alt"></i> Call Now</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ======================= 🔴 YOUR CONTACT INFORMATION - EDIT THESE 🔴 =======================
+  const CONTACT_EMAIL = "thekinsmanrealtygroup@proton.me";
+  const CONTACT_PHONE = "+13852813672";
+  const CONTACT_FACEBOOK = "https://www.facebook.com/share/1AyDcJqBo1/";
+  // ===========================================================================================
+  
+  // ======================= PROPERTY DATABASE =======================
+  // EDIT YOUR PROPERTIES HERE - Add up to 7 images per property (just add more URLs to the images array)
+  // Example: images: ["url1", "url2", "url3", "url4", "url5", "url6", "url7"]
+  
+  const propertiesDB = {
+    "78577": [
+      {
+        id: 1,
+        price: "$1,800/mo",
+        address: "65 Kratoz St #304, Pharr, TX 78577",
+        beds: 2,
+        baths: 2,
+        sqft: 1180,
+        // 👇 ADD UP TO 7 IMAGES HERE (just add more URLs to the array)
+        images: [
+          "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
+          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500",
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
+          "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?w=500",
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500"
+        ],
+        ownerName: "James Rodriguez",
+        ownerImg: "https://randomuser.me/api/portraits/men/32.jpg",
+        ownerTitle: "Property Owner",
+        remark: "🏠 This beautiful house is available for rent! Looking for someone with a good credit score (650+). Features modern appliances, hardwood floors, and a private balcony. Located in a quiet neighborhood close to schools and shopping.",
+        contactEmail: CONTACT_EMAIL,
+        contactPhone: CONTACT_PHONE,
+        facebookLink: CONTACT_FACEBOOK
+      },
+      {
+        id: 2,
+        price: "$2,100/mo",
+        address: "1201 N 10th St, McAllen, TX 78501",
+        beds: 3,
+        baths: 2,
+        sqft: 1450,
+        // 👇 ADD UP TO 7 IMAGES HERE
+        images: [
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
+          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=500",
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+          "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?w=500",
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500",
+          "https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=500",
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+        ],
+        ownerName: "Maria Gonzalez",
+        ownerImg: "https://randomuser.me/api/portraits/women/44.jpg",
+        ownerTitle: "Property Manager",
+        remark: "🌳 Spacious 3-bedroom family home with a large backyard! Good credit score (640+) required. Recently renovated kitchen, new HVAC, and fresh paint. Close to top-rated schools.",
+        contactEmail: CONTACT_EMAIL,
+        contactPhone: CONTACT_PHONE,
+        facebookLink: CONTACT_FACEBOOK
+      },
+      {
+        id: 3,
+        price: "$1,500/mo",
+        address: "210 E Hackberry Ave, McAllen, TX 78501",
+        beds: 2,
+        baths: 1,
+        sqft: 950,
+        // 👇 ADD UP TO 7 IMAGES HERE
+        images: [
+          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500",
+          "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=500",
+          "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500",
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500",
+          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
+          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500"
+        ],
+        ownerName: "Robert Martinez",
+        ownerImg: "https://randomuser.me/api/portraits/men/45.jpg",
+        ownerTitle: "Property Owner",
+        remark: "🏡 Cozy 2-bedroom home perfect for small families or professionals. Credit score 620+ required. Recently renovated with new flooring and fresh paint. Walking distance to downtown!",
+        contactEmail: CONTACT_EMAIL,
+        contactPhone: CONTACT_PHONE,
+        facebookLink: CONTACT_FACEBOOK
+      }
+    ]
+  };
+  
+  // Google Form URL
+  const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe1i6dFiBSmDNyOr_zwWb-O_fo7B20SqkDQKrsZ0X_DhJvKhA/viewform?usp=header";
+  
+  let currentProperty = null;
+  
+  function displayProperties(zipCode) {
+    const properties = propertiesDB[zipCode];
+    if (!properties || properties.length === 0) {
+      document.getElementById("errorMessage").style.display = "block";
+      document.getElementById("resultsSection").style.display = "none";
+      document.getElementById("searchCard").style.display = "block";
+      return;
+    }
+    
+    document.getElementById("zipDisplay").innerText = zipCode;
+    document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("resultsSection").style.display = "block";
+    document.getElementById("searchCard").style.display = "none";
+    
+    const listContainer = document.getElementById("propertiesList");
+    listContainer.innerHTML = "";
+    
+    properties.forEach(prop => {
+      const item = document.createElement("div");
+      item.className = "property-item";
+      item.onclick = () => showPropertyModal(prop);
+      item.innerHTML = `
+        <div class="property-content">
+          <img class="property-img" src="${prop.images[0]}" alt="Property" onerror="this.src='https://placehold.co/100x100?text=No+Image'">
+          <div class="property-info">
+            <div class="property-price">${prop.price}</div>
+            <div class="property-address"><i class="fas fa-map-pin" style="color:#c9a03d;"></i> ${prop.address}</div>
+            <div class="property-features">
+              <span><i class="fas fa-bed"></i> ${prop.beds}</span>
+              <span><i class="fas fa-bath"></i> ${prop.baths}</span>
+              <span><i class="fas fa-arrows-alt"></i> ${prop.sqft} sqft</span>
+            </div>
+            <div class="owner-preview">
+              <img src="${prop.ownerImg}" alt="Owner">
+              <span>${prop.ownerName} • ${prop.ownerTitle}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      listContainer.appendChild(item);
+    });
+  }
+  
+  function showPropertyModal(prop) {
+    const modal = document.getElementById("propertyModal");
+    const modalContent = document.getElementById("modalContent");
+    currentProperty = prop;
+    
+    // Build thumbnails (supports up to 7 images)
+    let thumbsHtml = '<div class="thumb-gallery">';
+    prop.images.forEach((img) => {
+      thumbsHtml += `<img src="${img}" data-img="${img}" onclick="document.getElementById('modalMainImg').src = this.dataset.img">`;
+    });
+    thumbsHtml += '</div>';
+    
+    modalContent.innerHTML = `
+      <img id="modalMainImg" class="modal-img" src="${prop.images[0]}" alt="Property">
+      <div class="modal-info">
+        <div class="modal-price">${prop.price}</div>
+        <div class="modal-address"><i class="fas fa-map-pin" style="color:#c9a03d;"></i> ${prop.address}</div>
+        <div class="modal-features">
+          <span><i class="fas fa-bed"></i> ${prop.beds} beds</span>
+          <span><i class="fas fa-bath"></i> ${prop.baths} baths</span>
+          <span><i class="fas fa-arrows-alt"></i> ${prop.sqft} sqft</span>
+        </div>
+        ${thumbsHtml}
+        <div class="owner-section">
+          <img src="${prop.ownerImg}" alt="Owner">
+          <div>
+            <strong>${prop.ownerName}</strong><br>
+            <span style="font-size:0.75rem; color:#64748b;">${prop.ownerTitle}</span>
+          </div>
+        </div>
+        <div class="remark">
+          <i class="fas fa-info-circle" style="color:#c9a03d; margin-right: 0.5rem;"></i>${prop.remark}
+        </div>
+        <div class="modal-buttons">
+          <button class="contact-btn" id="modalContactBtn"><i class="fas fa-headset"></i> Contact Landlord</button>
+          <button class="apply-btn" id="modalApplyBtn"><i class="fas fa-file-signature"></i> Apply Now</button>
+        </div>
+      </div>
+    `;
+    
+    modal.style.display = "flex";
+    document.getElementById("modalContactBtn").addEventListener("click", () => openContactPopup(prop));
+    document.getElementById("modalApplyBtn").addEventListener("click", () => openGoogleForm());
+  }
+  
+  function openContactPopup(prop) {
+    const popup = document.getElementById("contactPopup");
+    document.getElementById("popupEmail").href = `mailto:${prop.contactEmail}?subject=Inquiry about ${encodeURIComponent(prop.address)}&body=Hi, I'm interested in ${prop.address}. Please contact me.`;
+    document.getElementById("popupFacebook").href = prop.facebookLink;
+    document.getElementById("popupPhone").href = `tel:${prop.contactPhone.replace(/\D/g, '')}`;
+    popup.style.display = "flex";
+  }
+  
+  function closeContactPopup() {
+    document.getElementById("contactPopup").style.display = "none";
+  }
+  
+  function openGoogleForm() {
+    window.open(GOOGLE_FORM_URL, "_blank");
+  }
+  
+  function resetSearch() {
+    document.getElementById("resultsSection").style.display = "none";
+    document.getElementById("searchCard").style.display = "block";
+    document.getElementById("errorMessage").style.display = "none";
+    document.getElementById("zipInput").value = "";
+  }
+  
+  function searchProperty() {
+    const zipCode = document.getElementById("zipInput").value.trim();
+    if (!zipCode || zipCode.length !== 5 || !/^\d+$/.test(zipCode)) {
+      alert("Please enter a valid 5-digit zip code.");
+      return;
+    }
+    displayProperties(zipCode);
+  }
+  
+  // Event Listeners
+  document.getElementById("searchBtn").addEventListener("click", searchProperty);
+  document.getElementById("backToSearchBtn").addEventListener("click", resetSearch);
+  document.getElementById("zipInput").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") searchProperty();
+  });
+  document.getElementById("modalClose").addEventListener("click", () => {
+    document.getElementById("propertyModal").style.display = "none";
+  });
+  document.getElementById("closeContactPopup").addEventListener("click", closeContactPopup);
+  window.addEventListener("click", (e) => {
+    const modal = document.getElementById("propertyModal");
+    const popup = document.getElementById("contactPopup");
+    if (e.target === modal) modal.style.display = "none";
+    if (e.target === popup) closeContactPopup();
+  });
+</script>
+</body>
+</html>
