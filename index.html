@@ -446,7 +446,7 @@
       {
         id: 2,
         price: "$1,600/mo",
-        address: "970 sqft 523 E Madison St, Broken Arrow, OK 74012",
+        address: "523 E Madison St, Broken Arrow, OK 74012",
         beds: 2,
         baths: 2,
         sqft: 1450,
@@ -519,7 +519,7 @@
       item.onclick = () => showPropertyModal(prop);
       item.innerHTML = `
         <div class="property-content">
-          <img class="property-img" src="${prop.images[0]}" alt="Property" onerror="this.src='https://placehold.co/100x100?text=No+Image'">
+          <img class="property-img" src="${prop.images[0]}" alt="Property" onerror="this.src='https://placehold.co/100x100?text=Image+Not+Found'">
           <div class="property-info">
             <div class="property-price">${prop.price}</div>
             <div class="property-address"><i class="fas fa-map-pin" style="color:#c9a03d;"></i> ${prop.address}</div>
@@ -637,4 +637,4 @@
   });
 </script>
 </body>
-</html>
+  </html>
