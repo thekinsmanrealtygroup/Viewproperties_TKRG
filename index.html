@@ -13,7 +13,6 @@
       background: #f5f7fb;
       min-height: 100vh;
     }
-    /* Header */
     .site-header {
       background: #0a2a3f;
       padding: 1rem 1.5rem;
@@ -37,13 +36,11 @@
       font-size: 0.7rem;
       color: #c9a03d;
     }
-    /* Main Container */
     .container {
       max-width: 600px;
       margin: 0 auto;
       padding: 1rem;
     }
-    /* Search Card */
     .search-card {
       background: white;
       border-radius: 1.5rem;
@@ -80,8 +77,6 @@
       border-radius: 60px;
       cursor: pointer;
     }
-    
-    /* Results Section */
     .results-section {
       display: none;
       margin-top: 1rem;
@@ -101,8 +96,6 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
-    
-    /* Property List */
     .properties-list {
       display: flex;
       flex-direction: column;
@@ -163,8 +156,6 @@
       object-fit: cover;
     }
     .owner-preview span { font-size: 0.7rem; color: #64748b; }
-    
-    /* Modal - FULL SCROLLABLE CONTENT */
     .modal {
       display: none;
       position: fixed;
@@ -234,9 +225,7 @@
       margin: 0.5rem 0;
       flex-wrap: wrap;
     }
-    .modal-features span {
-      font-size: 0.9rem;
-    }
+    .modal-features span { font-size: 0.9rem; }
     .thumb-gallery {
       display: flex;
       gap: 0.5rem;
@@ -299,8 +288,6 @@
     }
     .contact-btn { background: #0a2a3f; color: white; }
     .apply-btn { background: #c9a03d; color: #0a2a3f; }
-    
-    /* Contact Popup */
     .contact-popup {
       display: none;
       position: fixed;
@@ -346,7 +333,6 @@
       color: #0a2a3f;
     }
     .contact-option i { width: 25px; color: #c9a03d; }
-    
     .error-message {
       background: #fee2e2;
       color: #991b1b;
@@ -364,12 +350,6 @@
       font-size: 0.7rem;
       margin-top: 1rem;
     }
-    /* Clearfix */
-    .clearfix::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
   </style>
 </head>
 <body>
@@ -381,18 +361,16 @@
 </header>
 
 <div class="container">
-  <!-- Search Card -->
   <div class="search-card" id="searchCard">
     <i class="fas fa-map-marker-alt" style="font-size: 2rem; color: #c9a03d;"></i>
     <h2>Find Your Perfect Home</h2>
     <p>Enter a zip code to see available rentals</p>
     <div class="zip-input-group">
-      <input type="text" id="zipInput" placeholder="Enter Zip Code" maxlength="5" pattern="[0-9]{5}">
+      <input type="text" id="zipInput" placeholder="Enter Zip Code" maxlength="5" pattern="[0-9]{5}" value="74012">
       <button id="searchBtn">Search</button>
     </div>
   </div>
 
-  <!-- Results Section -->
   <div id="resultsSection" class="results-section">
     <div class="results-header">
       <h3><i class="fas fa-home"></i> Properties in <span id="zipDisplay"></span></h3>
@@ -401,7 +379,6 @@
     <div id="propertiesList" class="properties-list"></div>
   </div>
 
-  <!-- Error Message -->
   <div id="errorMessage" class="error-message">
     <i class="fas fa-exclamation-triangle"></i> No properties found for this zip code.
   </div>
@@ -411,7 +388,6 @@
   <p>© 2026 Kinsman Realty Group — Find Your Dream Home</p>
 </footer>
 
-<!-- Property Modal -->
 <div id="propertyModal" class="modal">
   <div class="modal-content">
     <span class="modal-close" id="modalClose">&times;</span>
@@ -419,7 +395,6 @@
   </div>
 </div>
 
-<!-- Contact Popup -->
 <div id="contactPopup" class="contact-popup">
   <div class="contact-popup-content">
     <span class="contact-close" id="closeContactPopup">&times;</span>
@@ -434,89 +409,82 @@
 </div>
 
 <script>
-  // ======================= 🔴 YOUR CONTACT INFORMATION - EDIT THESE 🔴 =======================
+  // ======================= YOUR CONTACT INFORMATION =======================
   const CONTACT_EMAIL = "thekinsmanrealtygroup@proton.me";
   const CONTACT_PHONE = "+13852813672";
   const CONTACT_FACEBOOK = "https://www.facebook.com/share/1AyDcJqBo1/";
-  // ===========================================================================================
   
   // ======================= PROPERTY DATABASE =======================
-  // EDIT YOUR PROPERTIES HERE - Add up to 7 images per property (just add more URLs to the images array)
-  // Example: images: ["url1", "url2", "url3", "url4", "url5", "url6", "url7"]
+  // All your original images and addresses are preserved exactly as you entered them
   
   const propertiesDB = {
-    "78577": [
+    "74012": [
       {
         id: 1,
-        price: "$1,800/mo",
-        address: "65 Kratoz St #304, Pharr, TX 78577",
-        beds: 2,
-        baths: 2,
+        price: "$900/mo",
+        address: "1101 W Houston St, Broken Arrow, OK 74012",
+        beds: 1,
+        baths: 1,
         sqft: 1180,
-        // 👇 ADD UP TO 7 IMAGES HERE (just add more URLs to the array)
         images: [
-          "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
-          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500",
-          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500",
-          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
-          "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?w=500",
-          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500"
+          "/assets/images/1/c020db254ee4addcc026f7f5a5f47a8f-cc_ft_1152.webp",
+          "/assets/images/1/bf02dbc0ef606d5a5c5a3312b09e5a53-cc_ft_1152.webp",
+          "/assets/images/1/8ccd1da4a347679e1ecd4b95ade49451-cc_ft_1152.webp",
+          "/assets/images/1/72e03f21f2c7c109a592e1b5e7a5d113-cc_ft_1152.webp",
+          "/assets/images/1/702b950c111e27bef8b89e1d1a8c9cec-cc_ft_1152.webp",
+          "/assets/images/1/42af201d4da0c62f74eb26cee7e5f5cd-cc_ft_1152.webp",
+          "/assets/images/1/15ddc976e7bf6b8de30d0287a1633daf-cc_ft_1152.webp"
         ],
         ownerName: "James Rodriguez",
         ownerImg: "https://randomuser.me/api/portraits/men/32.jpg",
         ownerTitle: "Property Owner",
-        remark: "🏠 This beautiful house is available for rent! Looking for someone with a good credit score (650+). Features modern appliances, hardwood floors, and a private balcony. Located in a quiet neighborhood close to schools and shopping.",
+        remark: "This beautiful house is available for rent! Looking for someone with a good credit score (650+). Features modern appliances, hardwood floors, and a private balcony. Located in a quiet neighborhood close to schools and shopping.",
         contactEmail: CONTACT_EMAIL,
         contactPhone: CONTACT_PHONE,
         facebookLink: CONTACT_FACEBOOK
       },
       {
         id: 2,
-        price: "$2,100/mo",
-        address: "1201 N 10th St, McAllen, TX 78501",
-        beds: 3,
+        price: "$1,600/mo",
+        address: "970 sqft 523 E Madison St, Broken Arrow, OK 74012",
+        beds: 2,
         baths: 2,
         sqft: 1450,
-        // 👇 ADD UP TO 7 IMAGES HERE
         images: [
-          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
-          "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=500",
-          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
-          "https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?w=500",
-          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500",
-          "https://images.unsplash.com/photo-1575517111478-7f6afd0973db?w=500",
-          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500"
+          "/assets/images/2/09349053617117a086a4250358ed3f21-cc_ft_768.webp",
+          "/assets/images/2/23ff4a80b90d10174ce0e832b945512d-cc_ft_768.webp",
+          "/assets/images/2/37acc042a251460d9afe6eb55b72b940-cc_ft_768.webp",
+          "/assets/images/2/8986d6620f41bb54d0fb728b749b9adf-cc_ft_768.webp",
+          "/assets/images/2/b54ae4850c4d3f174363668126f49049-cc_ft_768.webp",
+          "/assets/images/2/d19d39629b63e455aa21c046e4055060-cc_ft_768.webp",
+          "/assets/images/2/e297a81092c691d5e066d4e3ec7facad-cc_ft_768.webp"
         ],
         ownerName: "Maria Gonzalez",
         ownerImg: "https://randomuser.me/api/portraits/women/44.jpg",
         ownerTitle: "Property Manager",
-        remark: "🌳 Spacious 3-bedroom family home with a large backyard! Good credit score (640+) required. Recently renovated kitchen, new HVAC, and fresh paint. Close to top-rated schools.",
+        remark: "Spacious 2-bedroom home with a large backyard! Good credit score (640+) required. Recently renovated kitchen, new HVAC, and fresh paint. Close to top-rated schools.",
         contactEmail: CONTACT_EMAIL,
         contactPhone: CONTACT_PHONE,
         facebookLink: CONTACT_FACEBOOK
       },
       {
         id: 3,
-        price: "$1,500/mo",
-        address: "210 E Hackberry Ave, McAllen, TX 78501",
-        beds: 2,
+        price: "$850/mo",
+        address: "611 N 14th St, Broken Arrow, OK 74012",
+        beds: 1,
         baths: 1,
         sqft: 950,
-        // 👇 ADD UP TO 7 IMAGES HERE
         images: [
-          "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500",
-          "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=500",
-          "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500",
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500",
-          "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
-          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
-          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=500"
+          "/assets/images/3/85d5cea95e76c494d838d69972bce093-cc_ft_768.webp",
+          "/assets/images/3/744bf4771e35819ed07ffd453a234c0f-cc_ft_768.webp",
+          "/assets/images/3/63b3a224d75a315948106bd6f0f93067-cc_ft_768.webp",
+          "/assets/images/3/48aa51264cc63bb9191637e78d081ff1-cc_ft_768.webp",
+          "/assets/images/3/3d634fad72418dec37b970effb8f5442-cc_ft_768.webp"
         ],
         ownerName: "Robert Martinez",
         ownerImg: "https://randomuser.me/api/portraits/men/45.jpg",
         ownerTitle: "Property Owner",
-        remark: "🏡 Cozy 2-bedroom home perfect for small families or professionals. Credit score 620+ required. Recently renovated with new flooring and fresh paint. Walking distance to downtown!",
+        remark: "Cozy 1-bedroom home perfect for singles or professionals. Credit score 620+ required. Recently renovated with new flooring and fresh paint. Walking distance to downtown!",
         contactEmail: CONTACT_EMAIL,
         contactPhone: CONTACT_PHONE,
         facebookLink: CONTACT_FACEBOOK
@@ -524,7 +492,6 @@
     ]
   };
   
-  // Google Form URL
   const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe1i6dFiBSmDNyOr_zwWb-O_fo7B20SqkDQKrsZ0X_DhJvKhA/viewform?usp=header";
   
   let currentProperty = null;
@@ -577,7 +544,6 @@
     const modalContent = document.getElementById("modalContent");
     currentProperty = prop;
     
-    // Build thumbnails (supports up to 7 images)
     let thumbsHtml = '<div class="thumb-gallery">';
     prop.images.forEach((img) => {
       thumbsHtml += `<img src="${img}" data-img="${img}" onclick="document.getElementById('modalMainImg').src = this.dataset.img">`;
@@ -649,7 +615,11 @@
     displayProperties(zipCode);
   }
   
-  // Event Listeners
+  // Auto-load properties for zip code 74012 on page load
+  window.addEventListener("DOMContentLoaded", function() {
+    displayProperties("74012");
+  });
+  
   document.getElementById("searchBtn").addEventListener("click", searchProperty);
   document.getElementById("backToSearchBtn").addEventListener("click", resetSearch);
   document.getElementById("zipInput").addEventListener("keypress", (e) => {
