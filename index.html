@@ -415,7 +415,8 @@
   const CONTACT_FACEBOOK = "https://www.facebook.com/share/1AyDcJqBo1/";
   
   // ======================= PROPERTY DATABASE FOR ZIP CODE 74012 =======================
-  // Only properties you have manually added - no empty or broken images
+  // Only properties with working images are included
+  // Removed broken image references from Property 2 - kept text only
   
   const propertiesDB = {
     "74012": [
@@ -450,15 +451,8 @@
         beds: 2,
         baths: 2,
         sqft: 1450,
-        images: [
-          "09349053617117a086a4250358ed3f21-cc_ft_768.webp",
-          "23ff4a80b90d10174ce0e832b945512d-cc_ft_768.webp",
-          "37acc042a251460d9afe6eb55b72b940-cc_ft_768.webp",
-          "8986d6620f41bb54d0fb728b749b9adf-cc_ft_768.webp",
-          "b54ae4850c4d3f174363668126f49049-cc_ft_768.webp",
-          "d19d39629b63e455aa21c046e4055060-cc_ft_768.webp",
-          "e297a81092c691d5e066d4e3ec7facad-cc_ft_768.webp"
-        ],
+        // NO IMAGES - all images were broken/blank, removed to prevent white squares
+        images: [],
         ownerName: "Maria Gonzalez",
         ownerImg: "https://randomuser.me/api/portraits/women/44.jpg",
         ownerTitle: "Property Manager",
@@ -518,12 +512,12 @@
       item.className = "property-item";
       item.onclick = () => showPropertyModal(prop);
       
-      // Use first image as preview, show placeholder if image fails to load
-      const firstImage = prop.images[0] || "";
+      // Use first image if available, otherwise show a placeholder
+      const previewImage = prop.images.length > 0 ? prop.images[0] : "https://placehold.co/100x100?text=No+Image";
       
       item.innerHTML = `
         <div class="property-content">
-          <img class="property-img" src="${firstImage}" alt="Property" onerror="this.src='https://placehold.co/100x100?text=No+Image'">
+          <img class="property-img" src="${previewImage}" alt="Property" onerror="this.src='https://placehold.co/100x100?text=No+Image'">
           <div class="property-info">
             <div class="property-price">${prop.price}</div>
             <div class="property-address"><i class="fas fa-map-pin" style="color:#c9a03d;"></i> ${prop.address}</div>
@@ -549,13 +543,19 @@
     currentProperty = prop;
     
     let thumbsHtml = '<div class="thumb-gallery">';
-    prop.images.forEach((img) => {
-      thumbsHtml += `<img src="${img}" data-img="${img}" onerror="this.onerror=null; this.src='https://placehold.co/70x55?text=No+Image'" onclick="document.getElementById('modalMainImg').src = this.dataset.img">`;
-    });
+    if (prop.images.length > 0) {
+      prop.images.forEach((img) => {
+        thumbsHtml += `<img src="${img}" data-img="${img}" onerror="this.onerror=null; this.src='https://placehold.co/70x55?text=No+Image'" onclick="document.getElementById('modalMainImg').src = this.dataset.img">`;
+      });
+    } else {
+      thumbsHtml = '<div style="padding:1rem; text-align:center; color:#64748b;">No additional images available</div>';
+    }
     thumbsHtml += '</div>';
     
+    const mainImage = prop.images.length > 0 ? prop.images[0] : "https://placehold.co/500x250?text=No+Image";
+    
     modalContent.innerHTML = `
-      <img id="modalMainImg" class="modal-img" src="${prop.images[0]}" alt="Property" onerror="this.src='https://placehold.co/500x250?text=Image+Not+Found'">
+      <img id="modalMainImg" class="modal-img" src="${mainImage}" alt="Property" onerror="this.src='https://placehold.co/500x250?text=Image+Not+Found'">
       <div class="modal-info">
         <div class="modal-price">${prop.price}</div>
         <div class="modal-address"><i class="fas fa-map-pin" style="color:#c9a03d;"></i> ${prop.address}</div>
